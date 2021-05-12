@@ -51,7 +51,7 @@ def humerus(perturbed_scores, file_name, output_path=None):
     scores_mapped = np.zeros_like(perturbed_scores)
 
     for idx,score_disturb in enumerate(perturbed_scores):
-        scores_mapped[idx] = np.multiply(scores_std[idx]),pc_sign_humerus_shape[idx])*score_disturb
+        scores_mapped[idx] = np.multiply((scores_std[idx]),pc_sign_humerus_shape[idx])*score_disturb
 
     nodes_no_mean = np.matmul(np.transpose(scores_mapped),np.transpose(coeff[:,0:scores_mapped.size]))
     nodes_mean = np.add(nodes_no_mean,humerus_shape_mean)
@@ -86,7 +86,7 @@ def scapula(perturbed_scores, file_name, output_path=None):
     scores_mapped = np.zeros_like(perturbed_scores)
 
     for idx,score_disturb in enumerate(perturbed_scores):
-        scores_mapped[idx] = np.multiply(scores_std[idx]),pc_sign_scapula_shape[idx])*score_disturb
+        scores_mapped[idx] = np.multiply((scores_std[idx]),pc_sign_scapula_shape[idx])*score_disturb
     
     nodes_no_mean = np.matmul(np.transpose(scores_mapped),np.transpose(coeff[:,0:scores_mapped.size]))
     nodes_mean = np.add(nodes_no_mean,scapula_shape_mean)
