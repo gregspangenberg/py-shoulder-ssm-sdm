@@ -25,7 +25,7 @@ def write_vtk_density(densities, input_file_path,output_dir_path,output_file_nam
 
 
 def humerus(perturbed_scores, file_name, output_path=None):
-    """Creates a humerus with varied density given an array of size 1,10 
+    """Creates a humerus with varied density given an array of size ( 1,10 )
 
     Args:
         perturbed_scores (numpy.ndarray): array of scores that specify the stadrad deviations away from the mean each principal component will be
@@ -35,14 +35,14 @@ def humerus(perturbed_scores, file_name, output_path=None):
     output_file_name =  file_name+'-'+str(perturbed_scores)+'.vtk'
 
     coeff = np.load('./SDM/humerus/input/coeff.npy')
-    scores = np.load('./SDM/humerus/input/scores.npy') 
+    scores_std = np.load('./SDM/humerus/input/scores_std.npy') 
     pc_sign_humerus_density = np.load('./SDM/humerus/input/pc_sign_humerus_density.npy')
     humerus_density_mean = np.load('./SDM/humerus/input/humerus_density_mean.npy').transpose()
 
     scores_mapped = np.zeros_like(perturbed_scores)
     
     for idx,score_disturb in enumerate(perturbed_scores):
-        scores_mapped[idx] = np.multiply(np.std(scores[:,idx], ddof=1),pc_sign_humerus_density[idx])*score_disturb
+        scores_mapped[idx] = np.multiply(scores_std[idx]),pc_sign_humerus_density[idx])*score_disturb
         
     
     density_no_mean = np.matmul(np.transpose(scores_mapped),np.transpose(coeff[:,0:scores_mapped.size]))
@@ -50,7 +50,7 @@ def humerus(perturbed_scores, file_name, output_path=None):
     write_vtk_density(density_mean,'./SDM/humerus/input/Average_Mesh_Humerus.vtk',output_path,output_file_name)
 
 def scapula(perturbed_scores, file_name, output_path=None):
-    """Creates a scapula with varied density given an array of size 1,10 
+    """Creates a scapula with varied density given an array of size ( 1,17 )
 
     Args:
         perturbed_scores (numpy.ndarray): array of scores that specify the stadrad deviations away from the mean each principal component will be
@@ -60,14 +60,14 @@ def scapula(perturbed_scores, file_name, output_path=None):
     output_file_name =  file_name+'-'+str(perturbed_scores)+'.vtk'
 
     coeff = np.load('./SDM/scapula/input/coeff.npy')
-    scores = np.load('./SDM/scapula/input/scores.npy') 
+    scores_std = np.load('./SDM/scapula/input/scores_std.npy') 
     pc_sign_scapula_density = np.load('./SDM/scapula/input/pc_sign_scapula_density.npy')
     scapula_density_mean = np.load('./SDM/scapula/input/scapula_density_mean.npy').transpose()
 
     scores_mapped = np.zeros_like(perturbed_scores)
     
     for idx,score_disturb in enumerate(perturbed_scores):
-        scores_mapped[idx] = np.multiply(np.std(scores[:,idx], ddof=1),pc_sign_scapula_density[idx])*score_disturb
+        scores_mapped[idx] = np.multiply(scores_std[idx]),pc_sign_scapula_density[idx])*score_disturb
         
     
     density_no_mean = np.matmul(np.transpose(scores_mapped),np.transpose(coeff[:,0:scores_mapped.size]))

@@ -26,7 +26,7 @@ def write_vtk_shape(file_name, nodes, polys, output_path = None):
         f.write(str(val)+' ')
 
 def humerus(perturbed_scores, file_name, output_path=None):
-    """Creates a humerus given an array of size 1,5 (r,c) without the need to calculate principal components each iteration
+    """Creates a humerus given an array of size ( 1,5 )
 
     Args:
         perturbed_scores (numpy.ndarray): 1,5 [PC0, PC1, PC2, PC3, PC4] array of scores specify the standard deviation from the mean for 5 principal components.
@@ -43,7 +43,7 @@ def humerus(perturbed_scores, file_name, output_path=None):
     output_file_name =  file_name+'-'+str(perturbed_scores)+'.vtk'
     
     coeff = np.load('./SSM/humerus/input/coeff.npy')
-    scores = np.load('./SSM/humerus/input/scores.npy')
+    scores_std = np.load('./SSM/humerus/input/scores_std.npy')
     elements = np.load('./SSM/humerus/input/elements.npy')# mean sample which is manipulated
     pc_sign_humerus_shape = np.load('./SSM/humerus/input/pc_sign_humerus_shape.npy') # enusres that positive std's are associated with increases
     humerus_shape_mean = np.load('./SSM/humerus/input/humerus_shape_mean.npy').transpose() #mean of points on all 54 samples
@@ -51,7 +51,7 @@ def humerus(perturbed_scores, file_name, output_path=None):
     scores_mapped = np.zeros_like(perturbed_scores)
 
     for idx,score_disturb in enumerate(perturbed_scores):
-        scores_mapped[idx] = np.multiply(np.std(scores[:,idx], ddof=1),pc_sign_humerus_shape[idx])*score_disturb
+        scores_mapped[idx] = np.multiply(scores_std[idx]),pc_sign_humerus_shape[idx])*score_disturb
 
     nodes_no_mean = np.matmul(np.transpose(scores_mapped),np.transpose(coeff[:,0:scores_mapped.size]))
     nodes_mean = np.add(nodes_no_mean,humerus_shape_mean)
@@ -61,7 +61,7 @@ def humerus(perturbed_scores, file_name, output_path=None):
 
 
 def scapula(perturbed_scores, file_name, output_path=None):
-    """Creates a scapula given an array of size 1,5 (r,c) without the need to calculate principal components each iteration
+    """Creates a scapula given an array of size ( 1,9 )
 
     Args:
         perturbed_scores (numpy.ndarray): 1,5 [PC0, PC1, PC2, PC3, PC4] array of scores specify the standard deviation from the mean for 5 principal components.
@@ -78,7 +78,7 @@ def scapula(perturbed_scores, file_name, output_path=None):
     output_file_name =  file_name+'-'+str(perturbed_scores)+'.vtk'
     
     coeff = np.load('./SSM/scapula/input/coeff.npy')
-    scores = np.load('./SSM/scapula/input/scores.npy')
+    scores_std = np.load('./SSM/scapula/input/scores_std.npy')
     elements = np.load('./SSM/scapula/input/elements.npy')# mean sample which is manipulated
     pc_sign_scapula_shape = np.load('./SSM/scapula/input/pc_sign_scapula_shape.npy') # enusres that positive std's are associated with increases
     scapula_shape_mean = np.load('./SSM/scapula/input/scapula_shape_mean.npy').transpose() #mean of points on all 54 samples
@@ -86,7 +86,7 @@ def scapula(perturbed_scores, file_name, output_path=None):
     scores_mapped = np.zeros_like(perturbed_scores)
 
     for idx,score_disturb in enumerate(perturbed_scores):
-        scores_mapped[idx] = np.multiply(np.std(scores[:,idx], ddof=1),pc_sign_scapula_shape[idx])*score_disturb
+        scores_mapped[idx] = np.multiply(scores_std[idx]),pc_sign_scapula_shape[idx])*score_disturb
     
     nodes_no_mean = np.matmul(np.transpose(scores_mapped),np.transpose(coeff[:,0:scores_mapped.size]))
     nodes_mean = np.add(nodes_no_mean,scapula_shape_mean)
