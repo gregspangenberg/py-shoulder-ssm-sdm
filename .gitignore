@@ -4,3 +4,4 @@ __pycache__
 hidden_scores/
 output/
 test
+*scores*
